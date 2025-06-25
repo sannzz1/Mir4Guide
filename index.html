@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Página Inicial - Lembretes por Hora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .container {
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    button {
+      padding: 0.75rem 2rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔔 Mir4Guide - The Sargento</h1>
+    <p>Clique no botão abaixo para ativar as notificações e acessar o sistema:</p>
+    <button onclick="ativarNotificacoes()">Ativar Notificações</button>
+  </div>
+  <script>
+    function ativarNotificacoes() {
+      Notification.requestPermission().then(perm => {
+        if (perm === 'granted') {
+          window.location.href = 'app.html';
+        } else {
+          alert('Permissão de notificação negada.');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

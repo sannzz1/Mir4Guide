@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mir4Guide - Lembrete e Horários - The Sargento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f9fd;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      padding: 1rem;
+    }
+    .top-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .card-box {
+      background: #ffffff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      width: 260px;
+    }
+    .card-box h3 {
+      margin-top: 0;
+    }
+    .card-box input,
+    .card-box button {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .card-box button {
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .card-destaque {
+      text-align: center;
+      border: 2px solid #007bff;
+    }
+    .card-proximo {
+      text-align: center;
+      border: 2px dashed #17a2b8;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      width: 180px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-azul {
+      background-color: #17a2b8;
+      color: white;
+    }
+    .btn-verde {
+      background-color: #dc3545;
+      color: white;
+    }
+    /* Pop-up centralizado */
+    .popup-alerta {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      background: #007bff;
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      text-align: center;
+      font-size: 1rem;
+    }
+    .popup-alerta button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: white;
+      color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>⏰ Mir4Guide - Lembrete e Horários / The Sargento</h1>
+
+  <div class="top-section">
+    <div class="card-box">
+      <h3>Criar Lembrete</h3>
+      <input type="time" id="horaPersonalizada" />
+      <input type="text" id="mensagemPersonalizada" placeholder="Mensagem" />
+      <button id="btnAddPersonalizado">Adicionar</button>
+    </div>
+
+    <div class="card-box">
+      <h3>Meus Lembretes</h3>
+      <div id="listaLembretes"></div>
+    </div>
+
+    <div class="card-box card-destaque" id="cardAtual">
+      <h3>Horário Atual</h3>
+    </div>
+
+    <div class="card-box card-proximo" id="cardProximo">
+      <h3>Próximo Horário</h3>
+    </div>
+  </div>
+
+  <div class="container" id="cardsContainer"></div>
+
+  <script>
+    // ========================
+    // Onde você deve colocar as descrições personalizadas:
+    // ========================
+
+    const cards = [
+      { hora: 0,  titulo: "00:00", descricao: "Wold Boss Navio Líder 3 Praça Redongato Sant... Ragnos" },
+      { hora: 1,  titulo: "01:00", descricao: "Red Boss Pico Sul Iruá Santuário" },
+      { hora: 2,  titulo: "02:00", descricao: "Anjo Santuário Frenzy" },
+      { hora: 3,  titulo: "03:00", descricao: "Líder 3 Praça Redongato Sant... " },
+      { hora: 4,  titulo: "04:00", descricao: "Red Boss Pico Nort Iruá Santuário" },
+      { hora: 5,  titulo: "05:00", descricao: "Anjo Santuário Secr Fúria" },
+      { hora: 6,  titulo: "06:00", descricao: "Líder 3 Praça Redongato Sant... " },
+      { hora: 7,  titulo: "07:00", descricao: "Red Boss Pico Sul Iruá Santuário" },
+      { hora: 8,  titulo: "08:00", descricao: "Anjo Santuário Frenzy" },
+      { hora: 9,  titulo: "09:00", descricao: "Líder 3 Praça Redongato Sant... Serv Dominação " },
+      { hora: 10, titulo: "10:00", descricao: "Wold Boss Labirinto Red Boss Pico Nort Iruá Santuário" },
+      { hora: 11, titulo: "11:00", descricao: "Boss Juja Domin... Anjo Santuário Secr Fúria" },
+      { hora: 12, titulo: "12:00", descricao: "Wold Boss Vale Líder 3 Praça Redongato Sant..." },
+      { hora: 13, titulo: "13:00", descricao: "Red Boss Pico Sul Iruá Santuário Secr Reset do Server" },
+      { hora: 14, titulo: "14:00", descricao: "Anjo Santuário Frenzy" },
+      { hora: 15, titulo: "15:00", descricao: "Líder 3 Praça Redongato Sant... Serv Dominação " },
+      { hora: 16, titulo: "16:00", descricao: "Red Boss Pico Nort Iruá Santuário" },
+      { hora: 17, titulo: "17:00", descricao: "Boss Juja Domin... Anjo Santuário Secr Fúria" },
+      { hora: 18, titulo: "18:00", descricao: "Líder 3 Praça Redongato Sant... " },
+      { hora: 19, titulo: "19:00", descricao: "Red Boss Pico Sul Iruá Santuário" },
+      { hora: 20, titulo: "20:00", descricao: "Wold Boss Labirinto Anjo Santuário Secr Frenzy" },
+      { hora: 21, titulo: "21:00", descricao: "Líder 3 Praça Redongato Sant... Serv Dominação " },
+      { hora: 22, titulo: "22:00", descricao: "Wold Boss Vale Oc Red Boss Pico Nort Iruá Santuário" },
+      { hora: 23, titulo: "23:00", descricao: "Boss Juja Domin... Anjo Santuário Secr Fúria" },
+    ];
+
+    const lembretesNaHora = new Set();
+    const lembretes5minAntes = new Set();
+    const lembretesPersonalizados = [];
+
+    function mostrarPopup(mensagem) {
+      const popup = document.createElement("div");
+      popup.className = "popup-alerta";
+      popup.innerHTML = `<p>${mensagem}</p><button onclick="this.parentElement.remove()">OK</button>`;
+      document.body.appendChild(popup);
+    }
+
+    function tocarAlarme(titulo, mensagem) {
+      try {
+        new Notification(titulo, { body: mensagem });
+      } catch (e) {
+        alert(`${titulo}\n${mensagem}`);
+      }
+      mostrarPopup(mensagem);
+      new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg").play();
+    }
+
+    function verificarHorario() {
+      const agora = new Date();
+      const horaBrasilia = new Date(
+        agora.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+      );
+      const h = horaBrasilia.getHours();
+      const m = horaBrasilia.getMinutes();
+
+      if (lembretesNaHora.has(h) && m === 0) {
+        tocarAlarme(`⏰ ${h}:00`, "Lembrete na hora");
+      }
+      if (lembretes5minAntes.has(h) && m === 55) {
+        tocarAlarme(`⚠️ ${h}:00`, "Lembrete 5 min antes");
+      }
+
+      lembretesPersonalizados.forEach((l, i) => {
+        if (l.hora === h && l.minuto === m) {
+          tocarAlarme("🔔 Lembrete personalizado", l.mensagem);
+          lembretesPersonalizados.splice(i, 1);
+          atualizarListaPersonalizados();
+        }
+      });
+
+      destacarCards(h);
+    }
+
+    function destacarCards(horaAtual) {
+      const atual = cards[horaAtual];
+      const proximo = cards[horaAtual + 1];
+      document.getElementById("cardAtual").innerHTML = `<h3>${
+        atual?.titulo || "--"
+      }</h3><p>${atual?.descricao || ""}</p>`;
+      document.getElementById("cardProximo").innerHTML = `<h3>${
+        proximo?.titulo || "--"
+      }</h3><p>${proximo?.descricao || ""}</p>`;
+    }
+
+    function criarCards() {
+      const container = document.getElementById("cardsContainer");
+      container.innerHTML = "";
+      cards.forEach((card) => {
+        const div = document.createElement("div");
+        div.className = "card";
+
+        const h3 = document.createElement("h3");
+        h3.textContent = card.titulo;
+
+        const desc = document.createElement("p");
+        desc.textContent = card.descricao;
+
+        const btn5 = document.createElement("button");
+        btn5.className = "btn btn-azul";
+        btn5.textContent = "Lembrar 5 min antes";
+        btn5.onclick = () => {
+          if (lembretes5minAntes.has(card.hora)) {
+            lembretes5minAntes.delete(card.hora);
+            btn5.textContent = "Lembrar 5 min antes";
+          } else {
+            lembretes5minAntes.add(card.hora);
+            btn5.textContent = "✅ 5 min antes";
+          }
+        };
+
+        const btn = document.createElement("button");
+        btn.className = "btn btn-verde";
+        btn.textContent = "Lembrar na hora";
+        btn.onclick = () => {
+          if (lembretesNaHora.has(card.hora)) {
+            lembretesNaHora.delete(card.hora);
+            btn.textContent = "Lembrar na hora";
+          } else {
+            lembretesNaHora.add(card.hora);
+            btn.textContent = "✅ Na hora";
+          }
+        };
+
+        div.appendChild(h3);
+        div.appendChild(desc);
+        div.appendChild(btn5);
+        div.appendChild(btn);
+
+        container.appendChild(div);
+      });
+    }
+
+    function atualizarListaPersonalizados() {
+      const lista = document.getElementById("listaLembretes");
+      lista.innerHTML = "";
+      lembretesPersonalizados.forEach((l) => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.textContent = `${l.hora.toString().padStart(2, "0")}:${l.minuto
+          .toString()
+          .padStart(2, "0")} - ${l.mensagem}`;
+        lista.appendChild(div);
+      });
+    }
+
+    document
+      .getElementById("btnAddPersonalizado")
+      .addEventListener("click", () => {
+        const hora = document.getElementById("horaPersonalizada").value;
+        const msg = document.getElementById("mensagemPersonalizada").value.trim();
+        if (!hora || !msg) return;
+        const [h, m] = hora.split(":").map(Number);
+        lembretesPersonalizados.push({ hora: h, minuto: m, mensagem: msg });
+        atualizarListaPersonalizados();
+        document.getElementById("horaPersonalizada").value = "";
+        document.getElementById("mensagemPersonalizada").value = "";
+      });
+
+    window.onload = () => {
+      criarCards();
+      setInterval(verificarHorario, 60);
+      verificarHorario();
+    };
+  </script>
+</body>
+</html>
