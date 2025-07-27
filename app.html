@@ -7,7 +7,8 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f9fd;
+      background: #222222; /* Cor de fundo principal: preto suave */
+      color: #ffffff; /* Cor do texto principal: branco */
       margin: 0;
       padding: 0;
     }
@@ -23,38 +24,45 @@
       padding: 1rem;
     }
     .card-box {
-      background: #ffffff;
+      background: #2c2c2c; /* Fundo dos cards: cinza um pouco mais claro que o body */
+      color: #ffffff; /* Cor do texto dos cards: branco */
       padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); /* Sombra ajustada para fundo escuro */
       width: 260px;
     }
     .card-box h3 {
       margin-top: 0;
     }
-    .card-box input,
+    .card-box input {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #555; /* Borda mais suave */
+      box-sizing: border-box;
+      background: #3a3a3a; /* Fundo do input: cinza escuro */
+      color: #ffffff; /* Texto do input: branco */
+    }
     .card-box button {
       width: 100%;
       margin: 0.5rem 0;
       padding: 0.5rem;
       font-size: 1rem;
       border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-    .card-box button {
-      background: #28a745;
-      color: white;
       border: none;
       cursor: pointer;
+      background: #28a745; /* Mantém a cor original do botão */
+      color: white;
     }
     .card-destaque {
       text-align: center;
-      border: 2px solid #007bff;
+      border: 2px solid #007bff; /* Mantém a borda de destaque azul */
     }
     .card-proximo {
       text-align: center;
-      border: 2px dashed #17a2b8;
+      border: 2px dashed #17a2b8; /* Mantém a borda de destaque ciano */
     }
     .container {
       display: flex;
@@ -64,9 +72,10 @@
       padding: 1rem;
     }
     .card {
-      background: #fff;
+      background: #2c2c2c; /* Fundo dos cards: cinza um pouco mais claro que o body */
+      color: #ffffff; /* Cor do texto dos cards: branco */
       border-radius: 8px;
-      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); /* Sombra ajustada para fundo escuro */
       padding: 1rem;
       width: 180px;
       box-sizing: border-box;
@@ -83,11 +92,11 @@
       cursor: pointer;
     }
     .btn-azul {
-      background-color: #17a2b8;
+      background-color: #17a2b8; /* Mantém a cor original do botão */
       color: white;
     }
     .btn-verde {
-      background-color: #dc3545;
+      background-color: #dc3545; /* Mantém a cor original do botão */
       color: white;
     }
     /* Pop-up centralizado */
@@ -97,7 +106,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 300px;
-      background: #007bff;
+      background: #007bff; /* Cor do pop-up: azul vibrante */
       color: white;
       padding: 1.5rem;
       border-radius: 8px;
